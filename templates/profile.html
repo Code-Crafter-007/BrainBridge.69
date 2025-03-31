@@ -1,0 +1,369 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>BrainBridge Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .nav-item:hover {
+            background: linear-gradient(to right, #ff7eb3, #ff758c);
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .modal-content {
+            background-color: rgba(47, 47, 47, 0.8);
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 10px solid #ddd;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+        .hand {
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: blue;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(0deg);
+            transition: transform 1s linear;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #ff007f;
+        }
+        input:checked + .slider:before {
+            transform: translateX(14px);
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+<div class="flex">
+    <!-- Sidebar -->
+    <div class="w-1/5 bg-gray-800 text-white h-screen p-4">
+        <h1 class="text-2xl font-bold mb-8">BrainBridge</h1>
+        <ul>
+          <li class="mb-4 nav-item p-2 rounded">
+              <i class="fas fa-home mr-2"></i>
+            <a href= "{{url_for('index')}}">Home</a>
+          </li>
+          <li class="mb-4 nav-item p-2 rounded">
+              <i class="fas fa-home mr-2"></i>
+            <a href= "#">PYQs</a>
+          </li>
+            <li class="mb-4 nav-item p-2 rounded">
+                <i class="fas fa-sticky-note mr-2"></i>
+                <a href="{{url_for('notes')}}">Notes</a>
+            </li>
+            <li class="mb-4 nav-item p-2 rounded">
+                <i class="fas fa-users mr-2"></i>
+                <a href="{{url_for('connect')}}">Connect</a>
+            </li>
+            <li class="mb-4 nav-item p-2 rounded">
+                <i class="fas fa-cog mr-2"></i>
+                Settings
+            </li>
+            <li class = "mb-4 nav-item p-2 rounded">
+              <i class="fas fa-sign-out-alt mr-2"></i>
+              <a href="{{url_for('login')}}">Logout</a>
+              </li>
+        </ul>
+    </div>
+    <!-- Main Content -->
+    <div class="w-4/5 p-4">
+        <div class="grid grid-cols-3 gap-4">
+            <!-- Profile Card -->
+            <div class="col-span-2 bg-gray-700 text-white p-4 rounded-2xl shadow card transition-transform duration-300">
+                <div class="flex items-center">
+                    <img alt="Profile Picture" class="rounded-full mr-4" height="100" src="https://storage.googleapis.com/a1aa/image/bFcb70jmHDyrqoh7D5EUpQEtb-7Azp41BQ6_U09ZQEM.jpg" width="100"/>
+                    <div>
+                        <h2 class="text-2xl font-bold">Yeshmita Chouhan</h2>
+                        <p class="text-lg">Computer Science</p>
+                        <p class="text-lg">1st Year</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Streak Progress -->
+            <div class="bg-gray-700 text-white p-4 rounded-2xl shadow card transition-transform duration-300">
+                <h2 class="text-xl font-bold mb-2">Streak Progress</h2>
+                <p>
+                    <i class="fas fa-fire text-red-500"></i>
+                    Streak: 0 / 7 days
+                </p>
+                <p>
+                    <i class="fas fa-star text-yellow-500"></i>
+                    Stars: 0
+                </p>
+                <button class="btn-gradient text-white px-4 py-2 rounded mt-2">Maintain Streak</button>
+                <div class="bg-gray-200 h-2 mt-2 rounded">
+                    <div class="bg-pink-700 h-2 rounded" style="width: 0%;"></div>
+                </div>
+            </div>
+            <!-- Study Progress -->
+            <div class="col-span-2 bg-gray-700 text-white p-4 rounded-2xl shadow card transition-transform duration-300">
+                <h2 class="text-xl font-bold mb-2">Study Progress</h2>
+                <canvas id="studyProgressChart"></canvas>
+            </div>
+            <!-- Goals or Motivation -->
+            <div class="bg-gray-700 text-white p-4 rounded-2xl shadow card transition-transform duration-300">
+                <h2 class="text-xl font-bold mb-2">
+                    <i class="fas fa-pencil-alt text-red-500"></i>
+                    MY GOALS or MOTIVATION
+                </h2>
+                <textarea class="w-full p-2 border rounded bg-gray-600 text-white" placeholder="Today's Study Motivation........" rows="4"></textarea>
+            </div>
+            <!-- Pomodoro Timer -->
+            <div class="bg-gray-700 text-white p-4 rounded-2xl shadow card transition-transform duration-300 col-span-3">
+                <h2 class="text-xl font-bold mb-2">
+                    <i class="fas fa-hourglass-half text-blue-500"></i>
+                    Pomodoro Timer
+                </h2>
+                <p class="text-2xl" id="timer">25:00</p>
+                <div class="flex space-x-4 mt-2">
+                    <button class="btn-gradient text-white px-4 py-2 rounded" id="startBtn">Start</button>
+                    <button class="btn-gradient text-white px-4 py-2 rounded" id="pauseBtn">Pause</button>
+                    <button class="btn-gradient text-white px-4 py-2 rounded" id="resetBtn">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="flex items-center justify-center h-full">
+            <div class="bg-gray-700 bg-opacity-80 p-8 rounded-lg shadow-lg relative">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center space-x-2">
+                        <span>Sound</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round bg-pink-500"></span>
+                        </label>
+                    </div>
+                    <div class="flex space-x-4">
+                        <i class="fas fa-cog"></i>
+                        <i class="fas fa-expand"></i>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="relative">
+                        <div class="w-48 h-48 rounded-full border-8 border-gray-600 flex items-center justify-center">
+                            <span class="text-2xl" id="modal-clock">25 : 00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-blue-500">•</span>
+                        <span>00:00</span>
+                    </div>
+                    <button class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center" id="modal-startBtn">
+                        <i class="fas fa-play text-white"></i>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-red-500">•</span>
+                        <span>00:00</span>
+                    </div>
+                </div>
+                <div class="flex justify-center mt-4 space-x-4">
+                    <button class="btn-gradient text-white px-4 py-2 rounded" id="modal-pauseBtn">Pause</button>
+                    <button class="btn-gradient text-white px-4 py-2 rounded" id="modal-resetBtn">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    let timer;
+    let seconds = 1500; // 25 minutes
+    let isRunning = false;
+    
+    let hand = document.getElementById('hand');
+    let timerDisplay = document.getElementById('timer');
+    let modal = document.getElementById("myModal");
+    let span = document.getElementsByClassName("close")[0];
+    let modalTimerDisplay = document.getElementById('modal-timer');
+    let modalClockDisplay = document.getElementById('modal-clock');
+
+    document.getElementById('startBtn').addEventListener('click', function () {
+        if (!isRunning) {
+            isRunning = true;
+            modal.style.display = "block";
+            timer = setInterval(updateTimer, 1000);
+        }
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', function () {
+        clearInterval(timer);
+        isRunning = false;
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+        resetTimer();
+    });
+
+    document.getElementById('modal-pauseBtn').addEventListener('click', function () {
+        clearInterval(timer);
+        isRunning = false;
+    });
+
+    document.getElementById('modal-resetBtn').addEventListener('click', function () {
+        resetTimer();
+    });
+
+    document.getElementById("logout-btn").addEventListener("click", function() {
+    fetch('/logout', { method: 'GET', credentials: 'include' })
+    .then(() => {
+        window.location.href = '/login';
+    })
+    .catch(error => console.error('Logout failed', error));
+});
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    function updateTimer() {
+        if (seconds > 0) {
+            seconds--;
+            updateDisplay();
+            let degrees = (1500 - seconds) * (360 / 1500);
+            if (hand) hand.style.transform = `rotate(${degrees}deg)`;
+        } else {
+            clearInterval(timer);
+            isRunning = false;
+            alert("Time's up!");
+        }
+    }
+
+    function updateDisplay() {
+        let minutes = Math.floor(seconds / 60);
+        let secs = seconds % 60;
+        let displayTime = `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        if (timerDisplay) timerDisplay.textContent = displayTime;
+        if (modalTimerDisplay) modalTimerDisplay.textContent = displayTime;
+        if (modalClockDisplay) modalClockDisplay.textContent = displayTime;
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        isRunning = false;
+        seconds = 1500;
+        updateDisplay();
+        if (hand) hand.style.transform = 'rotate(0deg)';
+    }
+
+    // Chart.js for Study Progress
+    const ctx = document.getElementById('studyProgressChart').getContext('2d');
+    const studyProgressChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Hours Spent',
+                data: [2, 1, 3, 2, 2.5, 1.5, 3],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Initial Display Update
+    updateDisplay();
+});</script></10>
+</body>
+</html>

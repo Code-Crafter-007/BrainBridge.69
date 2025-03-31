@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>
+        BrainBridge
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background-image: url('/requirements/resource_bg_new.avif');
+            background-size: cover;
+            background-position: center;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(41, 35, 35, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 bg-opacity-75 text-white">
+<nav class="flex justify-between items-center p-4 bg-black bg-opacity-75">
+    <div class="text-xl font-bold">
+        BrainBridge
+    </div>
+    <div class="space-x-4">
+        <a class="hover:underline" href="{{url_for('index')}}">
+            Home
+        </a>
+        <a class="hover:underline" href="#">
+            PYQS
+        </a>
+        <a class="hover:underline" href="{{url_for('resources')}}">
+            Resources
+        </a>
+        <a class="hover:underline" href="{{url_for('connect')}}">
+            Connect
+        </a>
+        <a class="hover:underline" href="{{url_for('profile')}}">
+            Profile
+        </a>
+        <a class="hover:underline" href="{{url_for('login')}}">
+            Logout
+        </a>
+    </div>
+</nav>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+    <div class="bg-black bg-opacity-50 p-4 rounded-lg shadow-lg card">
+        <div class="flex items-center space-x-4 mb-4">
+            <img alt="LeetCode logo" class="w-12 h-12" height="50" src="/requirements/LeetCodenew.png" width="50"/>
+            <img alt="Codeforces logo" class="w-12 h-12" height="50" src="/requirements/Codeforcesnew.jpg" width="50"/>
+            <img alt="HackerRank logo" class="w-12 h-12" height="50" src="/requirements/hackerranknew.webp" width="50"/>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">
+            Coding Platforms
+        </h2>
+        <ul class="space-y-1">
+            <li>
+                <a href="https://leetcode.com/">LeetCode</a>
+            </li>
+            <li>
+                <a href="https://codeforces.com/">CodeForces</a>
+            </li>   
+            <li>
+                <a href="https://www.hackerrank.com/">HackerRank</a>
+            </li>
+        </ul>
+    </div>
+    <div class="bg-black bg-opacity-50 p-4 rounded-lg shadow-lg card">
+        <div class="flex items-center space-x-4 mb-4">
+            <img alt="YouTube logo" class="w-12 h-12" height="50" src="/requirements/youtube logo.png" width="50"/>
+            <img alt="Apna College" class="w-12 h-12" height="50" src="/requirements/Apnacollege.jpeg" width="50"/>
+            <img alt="Code With Harry" class="w-12 h-12" height="50" src="/requirements/codewithharry 2.webp" width="50"/>
+            <img alt="" class="w-12 h-12" height="50" src="/requirements/Tank you forward.jpg"/>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">
+            YouTube Channels
+        </h2>
+        <ul class="space-y-1">
+            <li>
+               <a href="https://www.youtube.com/@ApnaCollegeOfficial">Apna College</a> 
+              
+            </li>
+            <li>
+                <a href="https://www.youtube.com/@CodeWithHarry">Code With Harry</a> 
+                
+            </li>
+            <li>
+                <a href="https://www.youtube.com/channel/UCJskGeByzRRSvmOyZOz61ig">Take You Forward</a>
+            </li>
+        </ul>
+    </div>
+    <div class="bg-black bg-opacity-50 p-4 rounded-lg shadow-lg card">
+        <div class="flex items-center space-x-4 mb-4">
+            <img alt="E-books logo" class="w-12 h-12" height="50" src="/requirements/pdf Drive.jpeg" width="50"/>
+            <img alt="E-books logo" class="w-12 h-12" height="50" src="/requirements/open stax logo.jpg" width="50"/>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">
+            E-books
+        </h2>
+        <ul class="space-y-1">
+            <li>
+                <a href="https://www.pdfdrive.com/">PDF Drive></a>
+            </li>
+            <li>
+                <a href="https://openstax.org/">Openstax</a>
+            </li>
+        </ul>
+    </div>
+    <div class="bg-black bg-opacity-50 p-4 rounded-lg shadow-lg card">
+        <div class="flex items-center space-x-4 mb-4">
+            <img alt="Udemy logo" class="w-12 h-12" height="50" src="/requirements/udemy logo.png" width="50"/>
+            <img alt="Coursera" class="w-12 h-12" height="50" src="/requirements/Coursera logo 2.svg" width="50"/>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">
+            Online Courses
+        </h2>
+        <ul class="space-y-1">
+            <li>
+                <a href="https://www.udemy.com/?srsltid=AfmBOoqrusdXuACB_VU7A1AP2WkmMvvh1FQuuBLNTkPQpkxYlt0DAa8X">Udemy</a>
+            </li>
+            <li>
+                <a herf ="https://www.coursera.org/courseraplus?utm_medium=sem&utm_source=gg&utm_campaign=b2c_india_special_coursera_ftcof_courseraplus_cx_dr_bau_gg_sem_bd-ex_in_all_m_hyb_24-05_x&campaignid=21327429274&adgroupid=162815312357&device=c&keyword=coursera&matchtype=e&network=g&devicemodel=&creativeid=700607287640&assetgroupid=&targetid=kwd-36262515261&extensionid=&placement=&gad_source=1&gclid=Cj0KCQjwkZm_BhDrARIsAAEbX1FZU8f7H6mppjgpqTbHSPGrRiFs4HAqyAc-AVUOBtBHqF_341bNhoQaAuKZEALw_wcB">Coursera</a>
+            </li>
+            <li>
+                edX
+            </li>
+        </ul>
+    </div>
+    <div class="bg-black bg-opacity-50 p-4 rounded-lg shadow-lg card">
+        <div class="flex items-center space-x-4 mb-4">
+            <img alt="GeeksForGeeks logo" class="w-12 h-12" height="50" src="/requirements/geek for  geeks.png" width="50"/>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">
+            Study Materials
+        </h2>
+        <ul class="space-y-1">
+            <li>
+                <a href="https://www.geeksforgeeks.org/courses?source=google&medium=cpc&device=c&keyword=geeksforgeeks&matchtype=p&campaignid=20039445781&adgroup=147845288105&gad_source=1&gclid=Cj0KCQjwkZm_BhDrARIsAAEbX1HWnefojk84dJOBUK2ckxkG5TN4CHNPYY7W6lM2e9nRF7mxi1ih7x8aAuoLEALw_wcB">Geeks For Geeks</a>
+            </li>
+            <li>
+                
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

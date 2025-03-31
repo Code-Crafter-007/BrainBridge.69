@@ -1,0 +1,265 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Pomodoro Timer with Study Sessions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="relative h-screen">
+        <img alt="Background image of a street night view in anime style" class="absolute inset-0 w-full h-full object-cover" height="1080" src="https://storage.googleapis.com/a1aa/image/hEeubXyhywSjQe8ZoDxvUhNG03gl-dzMPdMrcUJgQHU.jpg" width="1920"/>
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="absolute top-4 left-4 flex space-x-4">
+            <div class="bg-black bg-opacity-70 p-2 rounded-md flex items-center space-x-2">
+                <i class="fas fa-stopwatch"></i>
+                <span>Live study session</span>
+            </div>
+            <div class="bg-black bg-opacity-70 p-2 rounded-md flex items-center space-x-2">
+                <i class="fas fa-tasks"></i>
+                <span>Session goals</span>
+                <span id="goalCount">0</span>
+            </div>
+        </div>
+        <div class="absolute top-4 right-4 flex space-x-4">
+            <button class="bg-black bg-opacity-70 p-2 rounded-md">
+                <i class="fas fa-home"></i>
+            </button>
+            <button class="bg-black bg-opacity-70 p-2 rounded-md">
+                <i class="fas fa-user"></i>
+            </button>
+        </div>
+        <div class="absolute top-20 left-4 space-y-4">
+            <div class="bg-black bg-opacity-70 p-4 rounded-md">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold">
+                        <i class="fas fa-stopwatch"></i>
+                        Live study timer
+                    </span>
+                    <div class="flex space-x-2">
+                        <button id="startButton">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button id="pauseButton" class="hidden">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <button id="resetButton">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="text-4xl font-bold" id="mainTimer">50:00</div>
+                <div class="mt-4">
+                    <label for="workDurationInput" class="block text-sm">Set work duration (minutes):</label>
+                    <input id="workDurationInput" type="number" class="bg-gray-800 p-2 rounded-md w-full" value="50" min="1"/>
+                </div>
+                <div class="mt-4">
+                    <label for="breakDurationInput" class="block text-sm">Set break duration (minutes):</label>
+                    <input id="breakDurationInput" type="number" class="bg-gray-800 p-2 rounded-md w-full" value="110" min="1"/>
+                </div>
+                <div class="mt-4">
+                    <button id="setTimerButton" class="bg-gray-700 p-2 rounded-md w-full">Set Timer</button>
+                </div>
+            </div>
+            <div class="bg-black bg-opacity-70 p-4 rounded-md">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold">
+                        <i class="fas fa-tasks"></i>
+                        Session goals
+                    </span>
+                    <button>
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <input id="goalInput" class="bg-gray-800 p-2 rounded-md w-full" placeholder="Type a goal..." type="text"/>
+                    <button id="addGoalButton" class="bg-gray-700 p-2 rounded-md">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <ul id="goalList" class="space-y-2"></ul>
+            </div>
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center" style="left: 20%;">
+            <div class="bg-black bg-opacity-70 p-4 rounded-md w-1/3 h-3/4 mr-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold">
+                        <i class="fas fa-plus-circle"></i>
+                        Create Study Session
+                    </span>
+                </div>
+                <div class="mb-4">
+                    <label for="sessionName" class="block text-sm">Session Name:</label>
+                    <input id="sessionName" type="text" class="bg-gray-800 p-2 rounded-md w-full"/>
+                </div>
+                <div class="mb-4">
+                    <label for="sessionDescription" class="block text-sm">Description:</label>
+                    <textarea id="sessionDescription" class="bg-gray-800 p-2 rounded-md w-full"></textarea>
+                </div>
+                <div>
+                    <a href="https://meet.google.com/new" target="_blank" id="createSessionButton" class="bg-gray-700 p-2 rounded-md w-full text-center block">Create Session</a>
+                </div>
+            </div>
+            <div class="bg-black bg-opacity-70 p-4 rounded-md w-1/3 h-3/4 ml-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Join Study Session
+                    </span>
+                </div>
+                <div class="mb-4">
+                    <label for="joinPassword" class="block text-sm">Password:</label>
+                    <input id="joinPassword" type="password" class="bg-gray-800 p-2 rounded-md w-full"/>
+                </div>
+                <div>
+                    <a href="https://meet.google.com" target="_blank" id="joinSessionButton" class="bg-gray-700 p-2 rounded-md w-full text-center block">Join Session</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    let timer;
+let isRunning = false;
+let isWorkSession = true;
+let workDuration = 50 * 60; // 50 minutes
+let breakDuration = 110 * 60; // 110 minutes
+let timeLeft = workDuration;
+
+const timerElement = document.getElementById('mainTimer');
+const startButton = document.getElementById('startButton');
+const pauseButton = document.getElementById('pauseButton');
+const resetButton = document.getElementById('resetButton');
+const goalInput = document.getElementById('goalInput');
+const addGoalButton = document.getElementById('addGoalButton');
+const goalList = document.getElementById('goalList');
+const goalCount = document.getElementById('goalCount');
+const workDurationInput = document.getElementById('workDurationInput');
+const breakDurationInput = document.getElementById('breakDurationInput');
+const setTimerButton = document.getElementById('setTimerButton');
+
+let goals = [];
+let completedGoals = 0;
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function startTimer() {
+    if (!isRunning) {
+        isRunning = true;
+        startButton.classList.add('hidden');
+        pauseButton.classList.remove('hidden');
+        timer = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateTimerDisplay();
+            } else {
+                clearInterval(timer);
+                isRunning = false;
+                isWorkSession = !isWorkSession;
+                timeLeft = isWorkSession ? workDuration : breakDuration;
+                updateTimerDisplay();
+                alert(isWorkSession ? 'Break over! Time to get back to work.' : 'Work session over! Time for a break.');
+                startTimer(); // Restart the timer for the next session
+            }
+        }, 1000);
+    }
+}
+
+function pauseTimer() {
+    if (isRunning) {
+        clearInterval(timer);
+        isRunning = false;
+        startButton.classList.remove('hidden');
+        pauseButton.classList.add('hidden');
+    }
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    isRunning = false;
+    isWorkSession = true;
+    timeLeft = workDuration;
+    updateTimerDisplay();
+    startButton.classList.remove('hidden');
+    pauseButton.classList.add('hidden');
+}
+
+function addGoal() {
+    const goalText = goalInput.value.trim();
+    if (goalText !== "") {
+        const goalItem = document.createElement('li');
+        goalItem.className = "flex items-center space-x-2";
+        goalItem.innerHTML = `
+            <input type="checkbox" class="goal-checkbox">
+            <span>${goalText}</span>
+        `;
+        goalList.appendChild(goalItem);
+        goals.push(goalText);
+        updateGoalCount();
+        goalInput.value = "";
+    }
+}
+
+function updateGoalCount() {
+    goalCount.textContent = `${goals.length}`;
+    if (completedGoals === goals.length && goals.length > 0) {
+        alert('All goals completed!');
+        resetGoals();
+    }
+}
+
+function resetGoals() {
+    goals = [];
+    completedGoals = 0;
+    goalList.innerHTML = '';
+    updateGoalCount();
+}
+
+function setTimer() {
+    workDuration = parseInt(workDurationInput.value) * 60;
+    breakDuration = parseInt(breakDurationInput.value) * 60;
+    timeLeft = workDuration;
+    updateTimerDisplay();
+}
+
+goalList.addEventListener('change', (e) => {
+    if (e.target.classList.contains('goal-checkbox')) {
+        if (e.target.checked) {
+            completedGoals++;
+        } else {
+            completedGoals--;
+        }
+        updateGoalCount();
+    }
+});
+
+startButton.addEventListener('click', startTimer);
+pauseButton.addEventListener('click', pauseTimer);
+resetButton.addEventListener('click', resetTimer);
+addGoalButton.addEventListener('click', addGoal);
+goalInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addGoal();
+    }
+});
+setTimerButton.addEventListener('click', setTimer);
+
+updateTimerDisplay();
+
+ window.addEventListener("popstate", function (event) {
+       // When user clicks back, redirect to the previous page
+        window.history.back();
+    });
+
+
+</script>
+</body>
+</html>
